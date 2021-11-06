@@ -2,9 +2,12 @@ import React from "react";
 import "../styles/SearchBox.css";
 
 const SearchBox = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
   return (
     <div className="searchContainer">
-      <form>
+      <form onSubmit={handleSubmit}>
         <input type="text" placeholder="Search for a word ..." />
         <button type="submit">
           <svg
