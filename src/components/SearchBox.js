@@ -1,14 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/SearchBox.css";
 
 const SearchBox = () => {
+  const [word, setWord] = useState("");
+  const navigate = useNavigate();
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    navigate(`/${word}`);
   };
   return (
     <div className="searchContainer">
       <form onSubmit={handleSubmit}>
-        <input type="text" placeholder="Search for a word ..." />
+        <input
+          type="text"
+          placeholder="Search for a word ..."
+          onChange={(e) => setWord(e.target.value)}
+          value={word}
+        />
         <button type="submit">
           <svg
             xmlns="http://www.w3.org/2000/svg"

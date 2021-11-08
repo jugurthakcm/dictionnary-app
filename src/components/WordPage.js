@@ -1,10 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useParams } from "react-router";
 import "../styles/WordPage.css";
 
 const WordPage = () => {
+  const { word } = useParams();
+  useEffect(() => {
+    console.log(word);
+  }, [word]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
+
   return (
     <div className="wordPage">
-      <form className="wordPage__searchBox">
+      <form className="wordPage__searchBox" onSubmit={handleSubmit}>
         <input type="text" placeholder="Search for a word ..." />
         <button type="submit">
           <svg
