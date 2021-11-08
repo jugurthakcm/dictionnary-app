@@ -51,6 +51,7 @@
 
 .wordContainer {
   padding: 2rem;
+  padding-bottom: 1rem;
   border-radius: 0.5rem;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
   max-width: 800px;
@@ -62,6 +63,10 @@
   display: flex;
   align-items: center;
   gap: 0.8rem;
+}
+
+.wordTitle h1 {
+  text-transform: capitalize;
 }
 
 .wordTitle span {
@@ -87,6 +92,7 @@
   display: flex;
   align-items: flex-start;
   line-height: 1.6rem;
+  margin-bottom: 1rem;
 }
 
 .wordDefinitions .wordNum {
@@ -97,4 +103,7 @@
 
 .wordDefinitions .wordExample {
   display: block;
+  font-style: italic;
+  font-size: 1rem;
+  color: rgba(0, 0, 0, 0.6);
 }

@@ -1,16 +1,28 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import "../styles/WordPage.css";
 
 const WordPage = () => {
   const { word } = useParams();
+  const [data, setData] = useState();
+
   useEffect(() => {
-    console.log(word);
+    fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
+      .then((res) => res.json())
+      .then((data) => setData(data))
+      .catch((err) => console.error(err));
   }, [word]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
   };
+
+  const playAudio = () => {
+    const audio = document.querySelector("#audio");
+    audio.play();
+  };
+
+  console.log(data);
 
   return (
     <div className="wordPage">
@@ -29,10 +41,15 @@ const WordPage = () => {
           </svg>
         </button>
       </form>
+
       <div className="wordContainer">
         <div className="wordTitle">
-          <h1>Word</h1> <span>[W-o-r-d] </span>
-          <button>
+          <h1>{data && data[0].word}</h1>{" "}
+          <span>[{data && data[0].phonetics[0].text}] </span>
+          <audio id="audio" controls>
+            <source src={data && data[0].phonetics[0].audio} />
+          </audio>
+          <button onClick={playAudio}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               height="24px"
@@ -45,15 +62,24 @@ const WordPage = () => {
             </svg>
           </button>
         </div>
+
         <div className="wordDefinitions">
           <ul>
-            <li>
-              <span className="wordNum">1</span>
-              <div className="wordText">
-                <em>noun. </em>lorem impusm
-                <span className="wordExample">Example</span>
-              </div>
-            </li>
+            {data &&
+              data[0].meanings.map((e) => (
+                <li key={data[0].meanings.indexOf(e)}>
+                  <span className="wordNum">
+                    {data[0].meanings.indexOf(e) + 1}
+                  </span>
+                  <div className="wordText">
+                    <em>{e.partOfSpeech}. </em>
+                    {e.definitions[0].definition}
+                    <span className="wordExample">
+                      {e.definitions[0].example}
+                    </span>
+                  </div>
+                </li>
+              ))}
           </ul>
         </div>
       </div>
