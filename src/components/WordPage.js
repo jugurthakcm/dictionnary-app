@@ -46,9 +46,11 @@ const WordPage = () => {
         <div className="wordTitle">
           <h1>{data && data[0].word}</h1>{" "}
           <span>[{data && data[0].phonetics[0].text}] </span>
-          <audio id="audio" controls>
-            <source src={data && data[0].phonetics[0].audio} />
-          </audio>
+          {data && (
+            <audio id="audio">
+              <source src={data[0].phonetics[0].audio} />
+            </audio>
+          )}
           <button onClick={playAudio}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
