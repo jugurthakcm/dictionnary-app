@@ -4,7 +4,7 @@ import "../styles/WordPage.css";
 
 const WordPage = () => {
   const { word } = useParams();
-  const [data, setData] = useState();
+  const [data, setData] = useState({ error: false, response: null });
   const [newWord, setNewWord] = useState("");
   const navigate = useNavigate();
 
@@ -14,8 +14,8 @@ const WordPage = () => {
         if (!res.ok) throw new Error();
         return res.json();
       })
-      .then((data) => setData(data))
-      .catch(() => setData([]));
+      .then((data) => setData({ error: false, response: [...data] }))
+      .catch(() => setData({ error: true, response: [] }));
   }, [word]);
 
   const handleSubmit = (e) => {
@@ -52,39 +52,38 @@ const WordPage = () => {
           </svg>
         </button>
       </form>
+      {data.response && (
+        <div className="wordContainer">
+          {!data.error ? (
+            <>
+              <div className="wordTitle">
+                <h1>{data.response[0]?.word}</h1>{" "}
+                <span>[{data.response[0]?.phonetics[0].text}] </span>
+                {data.response && (
+                  <audio id="audio">
+                    <source src={data.response[0].phonetics[0].audio} />
+                  </audio>
+                )}
+                <button onClick={playAudio}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24px"
+                    viewBox="0 0 24 24"
+                    width="24px"
+                    fill="#000000"
+                  >
+                    <path d="M0 0h24v24H0V0z" fill="none" />
+                    <path d="M3 9v6h4l5 5V4L7 9H3zm7-.17v6.34L7.83 13H5v-2h2.83L10 8.83zM16.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77 0-4.28-2.99-7.86-7-8.77z" />
+                  </svg>
+                </button>
+              </div>
 
-      <div className="wordContainer">
-        {data && data.length ? (
-          <>
-            <div className="wordTitle">
-              <h1>{data && data[0].word}</h1>{" "}
-              <span>[{data && data[0].phonetics[0].text}] </span>
-              {data && (
-                <audio id="audio">
-                  <source src={data[0].phonetics[0].audio} />
-                </audio>
-              )}
-              <button onClick={playAudio}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  height="24px"
-                  viewBox="0 0 24 24"
-                  width="24px"
-                  fill="#000000"
-                >
-                  <path d="M0 0h24v24H0V0z" fill="none" />
-                  <path d="M3 9v6h4l5 5V4L7 9H3zm7-.17v6.34L7.83 13H5v-2h2.83L10 8.83zM16.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77 0-4.28-2.99-7.86-7-8.77z" />
-                </svg>
-              </button>
-            </div>
-
-            <div className="wordDefinitions">
-              <ul>
-                {data &&
-                  data[0].meanings.map((e) => (
-                    <li key={data[0].meanings.indexOf(e)}>
+              <div className="wordDefinitions">
+                <ul>
+                  {data.response[0]?.meanings.map((e) => (
+                    <li key={data.response[0]?.meanings.indexOf(e)}>
                       <span className="wordNum">
-                        {data[0].meanings.indexOf(e) + 1}
+                        {data.response[0]?.meanings.indexOf(e) + 1}
                       </span>
                       <div className="wordText">
                         <em>{e.partOfSpeech}. </em>
@@ -95,15 +94,16 @@ const WordPage = () => {
                       </div>
                     </li>
                   ))}
-              </ul>
-            </div>
-          </>
-        ) : (
-          <p className="errorSearch">
-            Sorry, we don't have the word you are looking for.
-          </p>
-        )}
-      </div>
+                </ul>
+              </div>
+            </>
+          ) : (
+            <p className="errorSearch">
+              Sorry, we don't have the word you are looking for.
+            </p>
+          )}
+        </div>
+      )}
     </div>
   );
 };
