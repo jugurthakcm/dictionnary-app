@@ -25,10 +25,10 @@ const WordPage = () => {
 
   const playAudio = () => {
     const audio = document.querySelector("#audio");
+    audio.pause();
+    audio.load();
     audio.play();
   };
-
-  console.log(data);
 
   return (
     <div className="wordPage">
