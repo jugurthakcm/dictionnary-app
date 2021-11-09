@@ -107,3 +107,8 @@
   font-size: 1rem;
   color: rgba(0, 0, 0, 0.6);
 }
+
+.wordContainer .errorSearch {
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
